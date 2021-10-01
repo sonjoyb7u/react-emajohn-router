@@ -6,7 +6,7 @@ import './Shop.css';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
-    const [cart, setCart] = useState([]);
+    const [carts, setCart] = useState([]);
     // products to be rendered on the UI
     const [displayProducts, setDisplayProducts] = useState([]);
 
@@ -36,8 +36,16 @@ const Shop = () => {
     }, [products])
 
     const handleAddToCart = (product) => {
-        const newCart = [...cart, product];
-        setCart(newCart);
+        const newCart = [...carts];
+        const isCartExists = carts.find(cart=>cart.key === product.key)
+        if(isCartExists) {
+            product.quantity += 1
+        }
+        else {
+            product.quantity = 1
+            newCart.push(product)
+        }
+        setCart(newCart)
         // save to local storage (for now)
         addToDb(product.key);
     }
@@ -70,7 +78,7 @@ const Shop = () => {
                     }
                 </div>
                 <div className="cart-container">
-                    <Cart cart={cart}></Cart>
+                    <Cart carts={carts}></Cart>
                 </div>
             </div>
         </>
